@@ -245,7 +245,7 @@ int CheckToMove(char f[HEIGHT][WIDTH],int currentBlock,int blockRotate, int bloc
 			if(block[currentBlock][blockRotate][i][j]==1){
 				if(f[i+blockY][j+blockX]==1)
 				return 0;
-				if(i+blockY>HEIGHT || i+blockY<0 || j+blockX>WIDTH || j+blockX<0)
+				if(i+blockY>=HEIGHT || i+blockY<0 || j+blockX>=WIDTH || j+blockX<0)
 				return 0;
 			}
 		}
@@ -302,7 +302,23 @@ void AddBlockToField(char f[HEIGHT][WIDTH],int currentBlock,int blockRotate, int
 
 int DeleteLine(char f[HEIGHT][WIDTH]){
 	// user code
-
+	int i, j, move, count = 0;
+	for(i=HEIGHT-1; i>0; i++){
+		for(j=0; j<WIDTH; j++){
+			if(f[i][j] == 0)	break;
+		} //search
+		if(j==WIDTH){ //case: full line occur
+			for(move = i-1; move<HEIGHT; move++){//start from upper line
+				for(j=0; j<WIDTH; j++){
+					f[move+1][j] = f[move][j];//copy curr line to below line
+				}
+			}
+			for(j=0; j<WIDTH; j++)	f[HEIGHT][j] = 0; //reset top(must drop 1 line)
+			count++;
+		}
+	}
+	
+	return count;
 	//1. 필드를 탐색하여, 꽉 찬 구간이 있는지 탐색한다.
 	//2. 꽉 찬 구간이 있으면 해당 구간을 지운다. 즉, 해당 구간으로 필드값을 한칸씩 내린다.
 }
