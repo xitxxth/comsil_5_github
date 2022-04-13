@@ -30,17 +30,18 @@ void InitTetris(){
 
 	for(j=0;j<HEIGHT;j++)
 		for(i=0;i<WIDTH;i++)
-			field[j][i]=0;
+			field[j][i]=0; // field reset
 
-	nextBlock[0]=rand()%7;
-	nextBlock[1]=rand()%7;
+	nextBlock[0]=rand()%7; // 0 1 2 3 4 5 6, curr block
+	nextBlock[1]=rand()%7; // 0 1 2 3 4 5 6, next block
 	blockRotate=0;
-	blockY=-1;
-	blockX=WIDTH/2-2;
-	score=0;	
-	gameOver=0;
-	timed_out=0;
+	blockY=-1; //realize at the roof
+	blockX=WIDTH/2-2; //realize at the center of the roof
+	score=0;//score reset
+	gameOver=0;//game0ver==1 -> over
+	timed_out=0;//used at blockdown()
 
+	//Draw
 	DrawOutline();
 	DrawField();
 	DrawBlock(blockY,blockX,nextBlock[0],blockRotate,' ');
@@ -65,7 +66,7 @@ void DrawOutline(){
 }
 
 int GetCommand(){
-	int command;
+	int command; // week1
 	command = wgetch(stdscr);
 	switch(command){
 	case KEY_UP:
@@ -91,14 +92,14 @@ int GetCommand(){
 }
 
 int ProcessCommand(int command){
-	int ret=1;
+	int ret=1; //output, program quit == QUIT or 'q', cf) tetris.h
 	int drawFlag=0;
 	switch(command){
 	case QUIT:
 		ret = QUIT;
 		break;
 	case KEY_UP:
-		if((drawFlag = CheckToMove(field,nextBlock[0],(blockRotate+1)%4,blockY,blockX)))
+		if((drawFlag = CheckToMove(field,nextBlock[0],(blockRotate+1)%4,blockY,blockX))) //drawflag==1 -> can
 			blockRotate=(blockRotate+1)%4;
 		break;
 	case KEY_DOWN:
@@ -120,7 +121,7 @@ int ProcessCommand(int command){
 	return ret;	
 }
 
-void DrawField(){
+void DrawField(){//0=='.', 1=='tile'
 	int i,j;
 	for(j=0;j<HEIGHT;j++){
 		move(j+1,1);
@@ -235,9 +236,21 @@ char menu(){
 }
 
 /////////////////////////첫주차 실습에서 구현해야 할 함수/////////////////////////
-
+//block[nexblock[0]]
 int CheckToMove(char f[HEIGHT][WIDTH],int currentBlock,int blockRotate, int blockY, int blockX){
 	// user code
+	int i, j;
+	for(i=0; i<HEIGHT; i++){
+		for(j=0; j<WIDTH; j++){
+			if(block[currentBlock][blockRotate][i][j]==1){
+				if(f[i+blockY][j+blockX]==1)
+				return 0;
+				if(i+blockY>HEIGHT || i+blockY<0 || j+blockX>WIDTH || j+blockX<0)
+				return 0;
+			}
+		}
+	}
+	return 1;
 }
 
 void DrawChange(char f[HEIGHT][WIDTH],int command,int currentBlock,int blockRotate, int blockY, int blockX){
@@ -250,13 +263,40 @@ void DrawChange(char f[HEIGHT][WIDTH],int command,int currentBlock,int blockRota
 
 void BlockDown(int sig){
 	// user code
-
-	//강의자료 p26-27의 플로우차트를 참고한다.
+	if(CheckToMove(field[HEIGHT][WIDTH], nextBlock[0], blockRotate, blockY-1, blockX);){
+		DrawChange(field, KEY_DOWN, blockY, blockX);
+		return;
+	}
+	else{
+		//gameover
+		if(blockY==-1){ //!(check to move) && blockY==-1 -> game0ver 
+			gameOver=1;
+		}
+		//add block
+		AddBlockToField(field, nextBlock[0], blockRotate, blockY, blockX); //curr==next[0], next==next[1]
+		//check deleting line
+		DeleteLine(field);
+		//print score
+		PrintScore(score);
+		//bring new block
+		nextBlock[0] = nextBlock[1];
+		//make new block
+		nextBlock[1] = rand()%7;
+		DrawNextBlock();
+		//initialize current block location(drop end), Drawfield()
+		blockY = -1; 
+		blockX = (WIDTH/2)-2;
+	}
+return;//강의자료 p26-27의 플로우차트를 참고한다.
 }
 
 void AddBlockToField(char f[HEIGHT][WIDTH],int currentBlock,int blockRotate, int blockY, int blockX){
 	// user code
-
+	int i, j;
+	for(j=0; j<HEIGHT; j++)
+		for(i=0; i<WIDTH; i++){
+			
+		}
 	//Block이 추가된 영역의 필드값을 바꾼다.
 }
 
