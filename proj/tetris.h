@@ -138,7 +138,7 @@ const char block[NUM_OF_SHAPE][NUM_OF_ROTATE][BLOCK_HEIGHT][BLOCK_WIDTH] ={
 
 char field[HEIGHT][WIDTH];	/* 테트리스의 메인 게임 화면 */
 int nextBlock[BLOCK_NUM];	/* 현재 블럭의 ID와 다음 블럭의 ID들을 저장; [0]: 현재 블럭; [1]: 다음 블럭 */
-int blockRotate,blockY,blockX;	/* 현재 블럭의 회전, 블럭의 Y 좌표, 블럭의 X 좌표*/
+int blockRotate,blockY,blockX;	/* 현재 블럭의 회전, 블럭의 Y 좌표, 블럭의 X 좌표*/ //week1
 int score;			/* 점수가 저장*/
 int gameOver=0;			/* 게임이 종료되면 1로 setting된다.*/
 int timed_out;
@@ -192,7 +192,7 @@ int ProcessCommand(int command);
  *	input	: (int) sig
  *	return	: none
  ***********************************************************/
-void BlockDown(int sig);
+void BlockDown(int sig); //week1
 
 /***********************************************************
  *	입력된 움직임이 가능한지를 판단해주는 함수.
@@ -204,8 +204,7 @@ void BlockDown(int sig);
  *	return	: (int) 입력에 대한 블럭 움직임이 가능하면 1
  *		  가능하지 않으면 0을 return 한다.
  ***********************************************************/
-int CheckToMove(char f[HEIGHT][WIDTH],int currentBlock,int blockRotate, int blockY, int blockX);
-
+int CheckToMove(char f[HEIGHT][WIDTH],int currentBlock,int blockRotate, int blockY, int blockX); //week1
 /***********************************************************
  *	테트리스에서 command에 의해 바뀐 부분만 다시 그려준다.
  *	input	: (char[][]) command의해 바뀐 블럭을 확인할 필드
@@ -216,7 +215,7 @@ int CheckToMove(char f[HEIGHT][WIDTH],int currentBlock,int blockRotate, int bloc
  *		  (int) 블럭의 X좌표
  *	return	: none
  ***********************************************************/
-void DrawChange(char f[HEIGHT][WIDTH],int command,int currentBlock,int blockRotate, int blockY, int blockX);
+void DrawChange(char f[HEIGHT][WIDTH],int command,int currentBlock,int blockRotate, int blockY, int blockX); //week1
 
 /***********************************************************
  *	테트리스의 블럭이 쌓이는 field를 그려준다.
@@ -234,14 +233,14 @@ void DrawField();
  *		  (int) 블럭의 X좌표
  *	return	: none
  ***********************************************************/
-void AddBlockToField(char f[HEIGHT][WIDTH],int currentBlock,int blockRotate, int blockY, int blockX);
+void AddBlockToField(char f[HEIGHT][WIDTH],int currentBlock,int blockRotate, int blockY, int blockX); //week1
 
 /***********************************************************
  *	완전히 채워진 Line을 삭제하고 점수를 매겨준다.
  *	input	: (char[][]) 완전히 채워진 line을 확인할 필드
  *	return	: (int) 삭제된 라인의 갯수에 대한 점수
  ***********************************************************/
-int DeleteLine(char f[HEIGHT][WIDTH]);
+int DeleteLine(char f[HEIGHT][WIDTH]); //week1
 
 /***********************************************************
  *	커서의 위치를 입력된 x, y의 위치로 옮겨주는 역할을 한다.
