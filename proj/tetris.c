@@ -243,9 +243,9 @@ int CheckToMove(char f[HEIGHT][WIDTH],int currentBlock,int blockRotate, int bloc
 	for(i=0; i<HEIGHT; i++){
 		for(j=0; j<WIDTH; j++){
 			if(block[currentBlock][blockRotate][i][j]==1){
-				if(f[i+blockY][j+blockX]==1)
-				return 0;
 				if(i+blockY>=HEIGHT || i+blockY<0 || j+blockX>=WIDTH || j+blockX<0)
+				return 0;
+				if(f[i+blockY][j+blockX]==1)
 				return 0;
 			}
 		}
@@ -255,7 +255,89 @@ int CheckToMove(char f[HEIGHT][WIDTH],int currentBlock,int blockRotate, int bloc
 
 void DrawChange(char f[HEIGHT][WIDTH],int command,int currentBlock,int blockRotate, int blockY, int blockX){
 	// user code
+	int prevY = blockY, prevX = blockX, prevRot = blockRotate;
+	int i, j;
+	switch(command){
+	case KEY_UP:
+	if(blockRotate)	prevRot = (blockRotate-1)%4; // 0-1-2-3-0 ...
+	else	prevRot = 3
+	for(i=0; i<HEIGHT; i++){
+		for(j=0; j<WIDTH; j++){
+		if(block[nextBlock[0]][prevRot][i][j]==1 && (prevY+i)<HEIGHT && (prevX+j)<WIDTH){
+			f[prevY+i][prevX+j] = 0; //reset prev block
+		}
+		}
+	}
+	for(i=0; i<HEIGHT; i++){
+		for(j=0; j<WIDTH; j++){
+			if(block[nextBlock[0][blockRotate][i][j]==1]){
+				f[blockY+i][blockX+j] = 1;
+			}
+		}
+	}
+	DrawBlock(blockY, blockX, nextBlock[0], blockRotate, '@');
+		break;
 
+	case KEY_DOWN:
+		prevY = blockY-1;
+		for(i=0; i<HEIGHT; i++){
+		for(j=0; j<WIDTH; j++){
+		if(block[nextBlock[0]][prevRot][i][j]==1 && (prevY+i)<HEIGHT && (prevX+j)<WIDTH){
+			f[prevY+i][prevX+j] = 0; //reset prev block
+		}
+		}
+	}
+	for(i=0; i<HEIGHT; i++){
+		for(j=0; j<WIDTH; j++){
+			if(block[nextBlock[0][blockRotate][i][j]==1]){
+				f[blockY+i][blockX+j] = 1;
+			}
+		}
+	}
+	DrawBlock(blockY, blockX, nextBlock[0], blockRotate, '@');
+		break;
+
+	case KEY_RIGHT:
+		prevX = blockX-1;
+		for(i=0; i<HEIGHT; i++){
+		for(j=0; j<WIDTH; j++){
+		if(block[nextBlock[0]][prevRot][i][j]==1 && (prevY+i)<HEIGHT && (prevX+j)<WIDTH){
+			f[prevY+i][prevX+j] = 0; //reset prev block
+		}
+		}
+	}
+	for(i=0; i<HEIGHT; i++){
+		for(j=0; j<WIDTH; j++){
+			if(block[nextBlock[0][blockRotate][i][j]==1]){
+				f[blockY+i][blockX+j] = 1;
+			}
+		}
+	}
+	DrawBlock(blockY, blockX, nextBlock[0], blockRotate, '@');
+		break;
+
+	case KEY_LEFT:
+		prevX = blockX+1;
+		for(i=0; i<HEIGHT; I++){
+		for(j=0; j<WIDTH; j++){
+		if(block[nextBlock[0]][prevRot][i][j]==1 && (prevY+i)<HEIGHT && (prevX+j)<WIDTH){
+			f[prevY+i][prevX+j] = 0; //reset prev block
+		}
+		}
+	}
+	for(i=0; i<HEIGHT; i++){
+		for(j=0; j<WIDTH; j++){
+			if(block[nextBlock[0][blockRotate][i][j]==1]){
+				f[blockY+i][blockX+j] = 1;
+			}
+		}
+	}
+	DrawBlock(blockY, blockX, nextBlock[0], blockRotate, '@');
+		break;
+
+	default:
+		break;
+	}
 	//1. 이전 블록 정보를 찾는다. ProcessCommand의 switch문을 참조할 것
 	//2. 이전 블록 정보를 지운다. DrawBlock함수 참조할 것.
 	//3. 새로운 블록 정보를 그린다. 
@@ -286,6 +368,7 @@ void BlockDown(int sig){
 		//initialize current block location(drop end), Drawfield()
 		blockY = -1; 
 		blockX = (WIDTH/2)-2;
+		DrawField();
 	}
 return;//강의자료 p26-27의 플로우차트를 참고한다.
 }
@@ -303,7 +386,7 @@ void AddBlockToField(char f[HEIGHT][WIDTH],int currentBlock,int blockRotate, int
 int DeleteLine(char f[HEIGHT][WIDTH]){
 	// user code
 	int i, j, move, count = 0;
-	for(i=HEIGHT-1; i>0; i++){
+	for(i=HEIGHT-1; i>0; i--){
 		for(j=0; j<WIDTH; j++){
 			if(f[i][j] == 0)	break;
 		} //search
@@ -318,7 +401,7 @@ int DeleteLine(char f[HEIGHT][WIDTH]){
 		}
 	}
 	
-	return count;
+	return count*count*100;
 	//1. 필드를 탐색하여, 꽉 찬 구간이 있는지 탐색한다.
 	//2. 꽉 찬 구간이 있으면 해당 구간을 지운다. 즉, 해당 구간으로 필드값을 한칸씩 내린다.
 }
