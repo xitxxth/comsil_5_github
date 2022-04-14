@@ -330,8 +330,7 @@ void BlockDown(int sig){
 	// user code
 timed_out=0;
 	if(CheckToMove(field, nextBlock[0], blockRotate, blockY+1, blockX)){
-		blockY++;
-        DrawChange(field, KEY_DOWN, nextBlock[0], blockRotate, blockY, blockX);
+        DrawChange(field, KEY_DOWN, nextBlock[0], blockRotate, ++blockY, blockX);
 	}
 	else{
 		//gameover
