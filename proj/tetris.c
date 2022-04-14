@@ -170,6 +170,7 @@ void DrawBlock(int y, int x, int blockID,int blockRotate,char tile){
 		}
 
 	move(HEIGHT,WIDTH+10);
+	
 }
 
 void DrawBox(int y,int x, int height, int width){
@@ -240,8 +241,8 @@ char menu(){
 int CheckToMove(char f[HEIGHT][WIDTH],int currentBlock,int blockRotate, int blockY, int blockX){
 	// user code
 	int i, j;
-	for(i=0; i<HEIGHT; i++){
-		for(j=0; j<WIDTH; j++){
+	for(i=0; i<4; i++){
+		for(j=0; j<4; j++){
 			if(block[currentBlock][blockRotate][i][j]==1){
 				if(i+blockY>=HEIGHT || i+blockY<0 || j+blockX>=WIDTH || j+blockX<0)
 				return 0;
@@ -259,80 +260,61 @@ void DrawChange(char f[HEIGHT][WIDTH],int command,int currentBlock,int blockRota
 	int i, j;
 	switch(command){
 	case KEY_UP:
-	if(blockRotate)	prevRot = (blockRotate-1)%4; // 0-1-2-3-0 ...
-	else	prevRot = 3
-	for(i=0; i<HEIGHT; i++){
-		for(j=0; j<WIDTH; j++){
-		if(block[nextBlock[0]][prevRot][i][j]==1 && (prevY+i)<HEIGHT && (prevX+j)<WIDTH){
-			f[prevY+i][prevX+j] = 0; //reset prev block
+	if(blockRotate){
+		prevRot = (blockRotate-1)%4;
+		} // 0-1-2-3-0 ...
+	else	prevRot = 3;
+	for(i=0; i<4; i++){
+		for(j=0; j<4; j++){
+		if(block[currentBlock][prevRot][i][j]==1 && (prevY+i)<HEIGHT && (prevX+j)<WIDTH){
+            move(i+prevY+1, j+prevX+2);
+            printw("\b.");//reset prev block
 		}
 		}
 	}
-	for(i=0; i<HEIGHT; i++){
-		for(j=0; j<WIDTH; j++){
-			if(block[nextBlock[0][blockRotate][i][j]==1]){
-				f[blockY+i][blockX+j] = 1;
-			}
-		}
-	}
-	DrawBlock(blockY, blockX, nextBlock[0], blockRotate, '@');
+	DrawBlock(blockY, blockX, currentBlock, blockRotate, ' ');
 		break;
 
 	case KEY_DOWN:
 		prevY = blockY-1;
-		for(i=0; i<HEIGHT; i++){
-		for(j=0; j<WIDTH; j++){
-		if(block[nextBlock[0]][prevRot][i][j]==1 && (prevY+i)<HEIGHT && (prevX+j)<WIDTH){
-			f[prevY+i][prevX+j] = 0; //reset prev block
+		for(i=0; i<4; i++){
+		for(j=0; j<4; j++){
+		if(block[currentBlock][prevRot][i][j]==1 && (prevY+i)<HEIGHT && (prevX+j)<WIDTH){
+            move(i+prevY+1, j+prevX+2);
+            printw("\b.");//reset prev block
 		}
 		}
 	}
-	for(i=0; i<HEIGHT; i++){
-		for(j=0; j<WIDTH; j++){
-			if(block[nextBlock[0][blockRotate][i][j]==1]){
-				f[blockY+i][blockX+j] = 1;
-			}
-		}
-	}
-	DrawBlock(blockY, blockX, nextBlock[0], blockRotate, '@');
+
+	DrawBlock(blockY, blockX, currentBlock, blockRotate, ' ');
 		break;
 
 	case KEY_RIGHT:
 		prevX = blockX-1;
-		for(i=0; i<HEIGHT; i++){
-		for(j=0; j<WIDTH; j++){
-		if(block[nextBlock[0]][prevRot][i][j]==1 && (prevY+i)<HEIGHT && (prevX+j)<WIDTH){
-			f[prevY+i][prevX+j] = 0; //reset prev block
+		for(i=0; i<4; i++){
+		for(j=0; j<4; j++){
+		if(block[currentBlock][prevRot][i][j]==1 && (prevY+i)<HEIGHT && (prevX+j)<WIDTH){
+            move(i+prevY+1, j+prevX+2);
+            printw("\b.");//reset prev block
 		}
 		}
 	}
-	for(i=0; i<HEIGHT; i++){
-		for(j=0; j<WIDTH; j++){
-			if(block[nextBlock[0][blockRotate][i][j]==1]){
-				f[blockY+i][blockX+j] = 1;
-			}
-		}
-	}
-	DrawBlock(blockY, blockX, nextBlock[0], blockRotate, '@');
+
+	DrawBlock(blockY, blockX, currentBlock, blockRotate, ' ');
 		break;
 
 	case KEY_LEFT:
 		prevX = blockX+1;
-		for(i=0; i<HEIGHT; I++){
-		for(j=0; j<WIDTH; j++){
-		if(block[nextBlock[0]][prevRot][i][j]==1 && (prevY+i)<HEIGHT && (prevX+j)<WIDTH){
-			f[prevY+i][prevX+j] = 0; //reset prev block
+		for(i=0; i<4; i++){
+		for(j=0; j<4; j++){
+		if(block[currentBlock][prevRot][i][j]==1 && (prevY+i)<HEIGHT && (prevX+j)<WIDTH){
+            move(i+prevY+1, j+prevX+2);
+            printw("\b.");//reset prev block
 		}
 		}
 	}
-	for(i=0; i<HEIGHT; i++){
-		for(j=0; j<WIDTH; j++){
-			if(block[nextBlock[0][blockRotate][i][j]==1]){
-				f[blockY+i][blockX+j] = 1;
-			}
-		}
-	}
-	DrawBlock(blockY, blockX, nextBlock[0], blockRotate, '@');
+
+	DrawBlock(blockY, blockX, currentBlock, blockRotate, ' ');
 		break;
 
 	default:
@@ -341,13 +323,15 @@ void DrawChange(char f[HEIGHT][WIDTH],int command,int currentBlock,int blockRota
 	//1. 이전 블록 정보를 찾는다. ProcessCommand의 switch문을 참조할 것
 	//2. 이전 블록 정보를 지운다. DrawBlock함수 참조할 것.
 	//3. 새로운 블록 정보를 그린다. 
+	return;
 }
 
 void BlockDown(int sig){
 	// user code
-	if(CheckToMove(field[HEIGHT][WIDTH], nextBlock[0], blockRotate, blockY-1, blockX);){
-		DrawChange(field, KEY_DOWN, blockY, blockX);
-		return;
+timed_out=0;
+	if(CheckToMove(field, nextBlock[0], blockRotate, blockY+1, blockX)){
+		blockY++;
+        DrawChange(field, KEY_DOWN, nextBlock[0], blockRotate, blockY, blockX);
 	}
 	else{
 		//gameover
@@ -357,14 +341,15 @@ void BlockDown(int sig){
 		//add block
 		AddBlockToField(field, nextBlock[0], blockRotate, blockY, blockX); //curr==next[0], next==next[1]
 		//check deleting line
-		DeleteLine(field);
+		score += DeleteLine(field);
 		//print score
 		PrintScore(score);
 		//bring new block
 		nextBlock[0] = nextBlock[1];
 		//make new block
 		nextBlock[1] = rand()%7;
-		DrawNextBlock();
+		blockRotate = 0;
+		DrawNextBlock(nextBlock);
 		//initialize current block location(drop end), Drawfield()
 		blockY = -1; 
 		blockX = (WIDTH/2)-2;
@@ -376,27 +361,31 @@ return;//강의자료 p26-27의 플로우차트를 참고한다.
 void AddBlockToField(char f[HEIGHT][WIDTH],int currentBlock,int blockRotate, int blockY, int blockX){
 	// user code
 	int i, j;
-	for(j=0; j<HEIGHT; j++)
-		for(i=0; i<WIDTH; i++){
-			
+	for(i=0; i<4; i++)
+		for(j=0; j<4; j++){
+			if(block[currentBlock][blockRotate][i][j]==1){
+                f[blockY+i][blockX+j] = 1;
+            }
 		}
 	//Block이 추가된 영역의 필드값을 바꾼다.
 }
 
 int DeleteLine(char f[HEIGHT][WIDTH]){
 	// user code
-	int i, j, move, count = 0;
-	for(i=HEIGHT-1; i>0; i--){
+	int i, j, count=0, i_reset;
+	for(i=HEIGHT; i>0; i--){
 		for(j=0; j<WIDTH; j++){
-			if(f[i][j] == 0)	break;
-		} //search
-		if(j==WIDTH){ //case: full line occur
-			for(move = i-1; move<HEIGHT; move++){//start from upper line
+			if(f[i][j]==0)	break;
+		}
+		if(j==WIDTH){
+			for(i_reset=i; i_reset>0; i_reset--){
 				for(j=0; j<WIDTH; j++){
-					f[move+1][j] = f[move][j];//copy curr line to below line
+				f[i_reset][j] = f[i_reset-1][j];
+				}
+				for(j=0; j<WIDTH; j++){
+					f[0][j] = 0;
 				}
 			}
-			for(j=0; j<WIDTH; j++)	f[HEIGHT][j] = 0; //reset top(must drop 1 line)
 			count++;
 		}
 	}
