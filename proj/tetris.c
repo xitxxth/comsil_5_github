@@ -243,78 +243,78 @@ int CheckToMove(char f[HEIGHT][WIDTH],int currentBlock,int blockRotate, int bloc
 	int i, j;
 	for(i=0; i<4; i++){
 		for(j=0; j<4; j++){
-			if(block[currentBlock][blockRotate][i][j]==1){
-				if(i+blockY>=HEIGHT || i+blockY<0 || j+blockX>=WIDTH || j+blockX<0)
+			if(block[currentBlock][blockRotate][i][j]==1){ //check if block exists(value==1)
+				if(i+blockY>=HEIGHT || i+blockY<0 || j+blockX>=WIDTH || j+blockX<0)//does it break the rule?
 				return 0;
-				if(f[i+blockY][j+blockX]==1)
+				if(f[i+blockY][j+blockX]==1)//the target place is already filled with block
 				return 0;
 			}
 		}
 	}
-	return 1;
+	return 1;//can move
 }
 
 void DrawChange(char f[HEIGHT][WIDTH],int command,int currentBlock,int blockRotate, int blockY, int blockX){
 	// user code
-	int prevY = blockY, prevX = blockX, prevRot = blockRotate;
+	int prevY = blockY, prevX = blockX, prevRot = blockRotate; //they represent the previous block's position
 	int i, j;
 	switch(command){
-	case KEY_UP:
+	case KEY_UP://arrow_up
 	if(blockRotate){
 		prevRot = (blockRotate-1)%4;
 		} // 0-1-2-3-0 ...
-	else	prevRot = 3;
+	else	prevRot = 3; //for 0
 	for(i=0; i<4; i++){
 		for(j=0; j<4; j++){
-		if(block[currentBlock][prevRot][i][j]==1 && (prevY+i)<HEIGHT && (prevX+j)<WIDTH){
-            move(i+prevY+1, j+prevX+2);
-            printw("\b.");//reset prev block
+		if(block[currentBlock][prevRot][i][j]==1 && (prevY+i)<HEIGHT && (prevX+j)<WIDTH){//does it break the rule? 
+            move(i+prevY+1, j+prevX+2);//move the cursor
+            printw("\b.");//erase prev block, fill it with dot
 		}
 		}
 	}
-	DrawBlock(blockY, blockX, currentBlock, blockRotate, ' ');
+	DrawBlock(blockY, blockX, currentBlock, blockRotate, ' ');//draw current block
 		break;
 
-	case KEY_DOWN:
-		prevY = blockY-1;
+	case KEY_DOWN://arrow_down
+		prevY = blockY-1;//previous block's position
 		for(i=0; i<4; i++){
 		for(j=0; j<4; j++){
-		if(block[currentBlock][prevRot][i][j]==1 && (prevY+i)<HEIGHT && (prevX+j)<WIDTH){
-            move(i+prevY+1, j+prevX+2);
-            printw("\b.");//reset prev block
+		if(block[currentBlock][prevRot][i][j]==1 && (prevY+i)<HEIGHT && (prevX+j)<WIDTH){//does it break the rule?
+            move(i+prevY+1, j+prevX+2);//move the cursor
+            printw("\b.");//erase prev block, fill it with dot
 		}
 		}
 	}
 
-	DrawBlock(blockY, blockX, currentBlock, blockRotate, ' ');
+	DrawBlock(blockY, blockX, currentBlock, blockRotate, ' ');//draw current block
 		break;
 
-	case KEY_RIGHT:
-		prevX = blockX-1;
+	case KEY_RIGHT://arrow_right
+		prevX = blockX-1;//previous block's position
 		for(i=0; i<4; i++){
 		for(j=0; j<4; j++){
-		if(block[currentBlock][prevRot][i][j]==1 && (prevY+i)<HEIGHT && (prevX+j)<WIDTH){
-            move(i+prevY+1, j+prevX+2);
-            printw("\b.");//reset prev block
+		if(block[currentBlock][prevRot][i][j]==1 && (prevY+i)<HEIGHT && (prevX+j)<WIDTH){//does it break the rule?
+            move(i+prevY+1, j+prevX+2);//move the cursor
+            printw("\b.");//erase prev block, fill it with dot
 		}
 		}
 	}
 
-	DrawBlock(blockY, blockX, currentBlock, blockRotate, ' ');
+	DrawBlock(blockY, blockX, currentBlock, blockRotate, ' ');//draw current block
 		break;
 
-	case KEY_LEFT:
-		prevX = blockX+1;
+	case KEY_LEFT://arrow_left
+		prevX = blockX+1;//previous block's position
 		for(i=0; i<4; i++){
 		for(j=0; j<4; j++){
-		if(block[currentBlock][prevRot][i][j]==1 && (prevY+i)<HEIGHT && (prevX+j)<WIDTH){
-            move(i+prevY+1, j+prevX+2);
-            printw("\b.");//reset prev block
+		if(block[currentBlock][prevRot][i][j]==1 && (prevY+i)<HEIGHT && (prevX+j)<WIDTH){//does it break the rule?
+            move(i+prevY+1, j+prevX+2);//move the cursor
+            printw("\b.");//erase prev block, fill it with dot
 		}
 		}
 	}
 
-	DrawBlock(blockY, blockX, currentBlock, blockRotate, ' ');
+	DrawBlock(blockY, blockX, currentBlock, blockRotate, ' ');//drow current block
 		break;
 
 	default:
@@ -326,11 +326,11 @@ void DrawChange(char f[HEIGHT][WIDTH],int command,int currentBlock,int blockRota
 	return;
 }
 
-void BlockDown(int sig){
+void BlockDown(int sig){//if get sig
 	// user code
-timed_out=0;
-	if(CheckToMove(field, nextBlock[0], blockRotate, blockY+1, blockX)){
-        DrawChange(field, KEY_DOWN, nextBlock[0], blockRotate, ++blockY, blockX);
+timed_out=0;//for next call(alarm call)
+	if(CheckToMove(field, nextBlock[0], blockRotate, blockY+1, blockX)){//can drop it?
+        DrawChange(field, KEY_DOWN, nextBlock[0], blockRotate, ++blockY, blockX);//drop it
 	}
 	else{
 		//gameover
@@ -338,21 +338,21 @@ timed_out=0;
 			gameOver=1;
 		}
 		//add block
-		AddBlockToField(field, nextBlock[0], blockRotate, blockY, blockX); //curr==next[0], next==next[1]
+		AddBlockToField(field, nextBlock[0], blockRotate, blockY, blockX); //turn block to field
 		//check deleting line
-		score += DeleteLine(field);
+		score += DeleteLine(field);//count score
 		//print score
-		PrintScore(score);
+		PrintScore(score);//print score
 		//bring new block
-		nextBlock[0] = nextBlock[1];
+		nextBlock[0] = nextBlock[1];//bring next block
 		//make new block
-		nextBlock[1] = rand()%7;
-		blockRotate = 0;
-		DrawNextBlock(nextBlock);
+		nextBlock[1] = rand()%7;//make new block
+		blockRotate = 0;//make new block
+		DrawNextBlock(nextBlock);//draw nextblock[1]
 		//initialize current block location(drop end), Drawfield()
 		blockY = -1; 
 		blockX = (WIDTH/2)-2;
-		DrawField();
+		DrawField();//draw field
 	}
 return;//강의자료 p26-27의 플로우차트를 참고한다.
 }
@@ -362,8 +362,8 @@ void AddBlockToField(char f[HEIGHT][WIDTH],int currentBlock,int blockRotate, int
 	int i, j;
 	for(i=0; i<4; i++)
 		for(j=0; j<4; j++){
-			if(block[currentBlock][blockRotate][i][j]==1){
-                f[blockY+i][blockX+j] = 1;
+			if(block[currentBlock][blockRotate][i][j]==1){//turn block
+                f[blockY+i][blockX+j] = 1;//into field
             }
 		}
 	//Block이 추가된 영역의 필드값을 바꾼다.
@@ -372,24 +372,26 @@ void AddBlockToField(char f[HEIGHT][WIDTH],int currentBlock,int blockRotate, int
 int DeleteLine(char f[HEIGHT][WIDTH]){
 	// user code
 	int i, j, count=0, i_reset;
-	for(i=HEIGHT; i>0; i--){
+	for(i=HEIGHT; i>0; i--){//bottom-top (it is easier then top-bottom)
+	/* The game is easy(slow) now, so block destroy must occur usually near bottom.
+	so program compute from the bottom*/
 		for(j=0; j<WIDTH; j++){
-			if(f[i][j]==0)	break;
+			if(f[i][j]==0)	break;//there is empty space between blocks!
 		}
-		if(j==WIDTH){
-			for(i_reset=i; i_reset>0; i_reset--){
-				for(j=0; j<WIDTH; j++){
-				f[i_reset][j] = f[i_reset-1][j];
+		if(j==WIDTH){//j==WIDTH means line is full
+			for(i_reset=i; i_reset>0; i_reset--){//use i_reset to not corrupt i
+				for(j=0; j<WIDTH; j++){//
+				f[i_reset][j] = f[i_reset-1][j];//drag down the field
 				}
 				for(j=0; j<WIDTH; j++){
-					f[0][j] = 0;
+					f[0][j] = 0;//when the j==WIDTH occurs, anyway the top line must be destroyed.
 				}
 			}
-			count++;
+			count++;//count = destroyed lines
 		}
 	}
 	
-	return count*count*100;
+	return count*count*100;//as a pre_condition
 	//1. 필드를 탐색하여, 꽉 찬 구간이 있는지 탐색한다.
 	//2. 꽉 찬 구간이 있으면 해당 구간을 지운다. 즉, 해당 구간으로 필드값을 한칸씩 내린다.
 }
