@@ -34,6 +34,7 @@ void InitTetris(){
 
 	nextBlock[0]=rand()%7; // 0 1 2 3 4 5 6, curr block
 	nextBlock[1]=rand()%7; // 0 1 2 3 4 5 6, next block
+	nextBlock[2]=rand()%7;
 	blockRotate=0;
 	blockY=-1; //realize at the roof
 	blockX=WIDTH/2-2; //realize at the center of the roof
@@ -58,6 +59,7 @@ void DrawOutline(){
 	move(2,WIDTH+10);
 	printw("NEXT BLOCK");
 	DrawBox(3,WIDTH+10,4,8);
+	DrawBox(7,WIDTH+10,4,8);
 
 	/* score를 보여주는 공간의 태두리를 그린다.*/
 	move(9,WIDTH+10);
@@ -148,6 +150,17 @@ void DrawNextBlock(int *nextBlock){
 		move(4+i,WIDTH+13);
 		for( j = 0; j < 4; j++ ){
 			if( block[nextBlock[1]][0][i][j] == 1 ){
+				attron(A_REVERSE);
+				printw(" ");
+				attroff(A_REVERSE);
+			}
+			else printw(" ");
+		}
+	}
+	for( i = 0; i < 4; i++ ){
+		move(8+i,WIDTH+13);
+		for( j = 0; j < 4; j++ ){
+			if( block[nextBlock[2]][0][i][j] == 1 ){
 				attron(A_REVERSE);
 				printw(" ");
 				attroff(A_REVERSE);
